@@ -1,4 +1,6 @@
-bfolders = ["../games", "../nongames"]
+require 'json'
+
+bfolders = ["games", "nongames"]
 
 $categories = {
     "development" => {
@@ -108,17 +110,25 @@ def scan (repo)
 end
 
 def categorize (basefolder)
+    upper = {}
     Dir.glob(basefolder+"/*").each do |repo|
-        res = scan repo
-        puts "\r\n" + repo + " results are: "
-        puts res
+        upper[repo.split('/').last] = scan repo
     end
+    return upper
 end
 
-bfolders.each { |f| categorize f }
+$analysis = {}
+bfolders.each do |f| 
+    $analysis[f] = categorize f
+end
 
-logfile = "../logs/notfoundext_"+Time.now.to_i.to_s+".csv"
+#write log
+logfile = "logs/notfoundext_"+Time.now.to_i.to_s+".csv"
 File.write(logfile, "extension,count\r\n", mode: "a")
 $notfound_extensions.sort_by {|_key, value| value}.reverse!.each do |enotf,count|
     File.write(logfile, enotf+","+count.to_s+"\r\n", mode: "a")
 end
+
+#write result
+resfile = "results/categorize.json"
+File.write(resfile, $analysis.to_json)
