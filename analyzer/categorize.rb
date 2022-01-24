@@ -72,17 +72,31 @@ def scan (repo)
     empty = newempty
     Dir.glob(repo+"/**/*").each do |file|
 
+        notfound = true
+
         #find extension
         ext = File.extname(file).delete "."
         if ext.length != 0
             eindex = $extensions.keys.find_index(ext)
             if eindex
+                notfound = false
                 empty[ $extensions[ext][:section] ][ $extensions[ext][:category] ]+=1
-            else
-                empty["other"]["notfound"]+=1
             end
         else
             empty["other"]["noext"]+=1
+        end
+
+        #find keyword in path
+        patharray = file.split('/')
+        $keywords.each do |k, content|
+            if patharray.include? k
+                notfound = false
+                empty[ content[:section] ][ content[:category] ]+=1
+            end
+        end
+
+        if notfound
+            empty["other"]["notfound"]+=1
         end
 
     end
