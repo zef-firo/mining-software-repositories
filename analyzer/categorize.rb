@@ -48,6 +48,8 @@ $categories = {
 $keywords = {}
 $extensions = {}
 
+$notfound_extensions = {}
+
 $categories.each do |section, categories|
     categories.each do |category, content|
         content["keywords"].each { |k| $keywords[k] = {"section": section, "category": category} }
@@ -83,6 +85,7 @@ def scan (repo)
                 empty[ $extensions[ext][:section] ][ $extensions[ext][:category] ]+=1
             end
         else
+            notfound = false
             empty["other"]["noext"]+=1
         end
 
@@ -96,6 +99,7 @@ def scan (repo)
         end
 
         if notfound
+            $notfound_extensions[ ext ] = $notfound_extensions[ ext ] ? $notfound_extensions[ ext ]+1 : 1;
             empty["other"]["notfound"]+=1
         end
 
@@ -112,3 +116,9 @@ def categorize (basefolder)
 end
 
 bfolders.each { |f| categorize f }
+
+logfile = "../logs/notfoundext_"+Time.now.to_i.to_s+".csv"
+File.write(logfile, "extension,count\r\n", mode: "a")
+$notfound_extensions.sort_by {|_key, value| value}.reverse!.each do |enotf,count|
+    File.write(logfile, enotf+","+count.to_s+"\r\n", mode: "a")
+end
