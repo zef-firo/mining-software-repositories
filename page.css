@@ -1,0 +1,11 @@
+#cat-results, #cat-in-execution {
+    display: none;
+}
+.panel {
+    border: 1px solid #dedede;
+    padding:15px;
+    border-radius: 3px;
+}
+body {
+    padding-bottom: 50px;
+}
