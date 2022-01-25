@@ -1,3 +1,5 @@
 games
 nongames
+logs/*
+results/*
 .DS_store
