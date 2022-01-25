@@ -1,5 +1,2 @@
-games
-nongames
-logs/*
-results/*
+node_modules
 .DS_store

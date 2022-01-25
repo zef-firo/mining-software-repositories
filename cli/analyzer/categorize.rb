@@ -111,7 +111,7 @@ end
 
 def categorize (basefolder)
     upper = {}
-    Dir.glob(basefolder+"/*").each do |repo|
+    Dir.glob(File.dirname(__dir__)+"/"+basefolder+"/*").each do |repo|
         upper[repo.split('/').last] = scan repo
     end
     return upper
@@ -123,12 +123,12 @@ bfolders.each do |f|
 end
 
 #write log
-logfile = "logs/notfoundext_"+Time.now.to_i.to_s+".csv"
+logfile = File.dirname(__dir__)+"/"+"logs/notfoundext_"+Time.now.to_i.to_s+".csv"
 File.write(logfile, "extension,count\r\n", mode: "a")
 $notfound_extensions.sort_by {|_key, value| value}.reverse!.each do |enotf,count|
     File.write(logfile, enotf+","+count.to_s+"\r\n", mode: "a")
 end
 
 #write result
-resfile = "results/categorize.json"
+resfile = File.dirname(__dir__)+"/"+"results/categorize.json"
 File.write(resfile, $analysis.to_json)
