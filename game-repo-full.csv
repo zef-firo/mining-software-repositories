@@ -1,26 +1,26 @@
-name,path,folder
-0 A.D.,https://github.com/0ad/0ad.git,
-Arx Libertatis,https://github.com/arx/ArxLibertatis.git,
-AssaultCube,https://github.com/assaultcube/AC.git,
-Battle for Wesnoth,https://github.com/wesnoth/wesnoth.git,
-Cataclysm-DDA,https://github.com/CleverRaven/Cataclysm-DDA.git,
-Chaotic Rage,https://github.com/TheJosh/chaotic-rage.git,
-Dungeon Crawl,https://github.com/crawl/crawl.git,
-FlightGear,https://github.com/FlightGear/flightgear.git,
-FreeSpace,https://github.com/scp-fs2open/fs2open.github.com.git,
-Frogatto,https://github.com/frogatto/frogatto.git,
-Hedgewars,https://github.com/hedgewars/hw.git,
-ManaPlus,https://github.com/ManaPlus/ManaPlus.git,
-MegaGlest,https://github.com/MegaGlest/megaglest-source.git,
-Minetest,https://github.com/minetest/minetest.git,
-Multitheftauto,https://github.com/MrHankey/multitheftauto.git,
-Oolite,https://github.com/OoliteProject/oolite.git,
-OpenArena,https://github.com/undeadzy/openarena_engine.git,
-OpenClonk,https://github.com/openclonk/openclonk.git,
-OpenDungeons,https://github.com/OpenDungeons/OpenDungeons.git,
-OpenMW,https://github.com/OpenMW/openmw.git,
-OpenSimulator,https://github.com/nebadon2025/opensimulator.git,
-Orxonox,https://github.com/forivall-mirrors/orxonox-game-code.git,
-Pioneer,https://github.com/pioneerspacesim/pioneer.git,
-SuperTuxKart,https://github.com/supertuxkart/stk-code.git,
-Warzone 2100,https://github.com/Warzone2100/warzone2100.git,
+name,path
+0 A.D.,https://github.com/0ad/0ad.git
+Arx Libertatis,https://github.com/arx/ArxLibertatis.git
+AssaultCube,https://github.com/assaultcube/AC.git
+Battle for Wesnoth,https://github.com/wesnoth/wesnoth.git
+Cataclysm-DDA,https://github.com/CleverRaven/Cataclysm-DDA.git
+Chaotic Rage,https://github.com/TheJosh/chaotic-rage.git
+Dungeon Crawl,https://github.com/crawl/crawl.git
+FlightGear,https://github.com/FlightGear/flightgear.git
+FreeSpace,https://github.com/scp-fs2open/fs2open.github.com.git
+Frogatto,https://github.com/frogatto/frogatto.git
+Hedgewars,https://github.com/hedgewars/hw.git
+ManaPlus,https://github.com/ManaPlus/ManaPlus.git
+MegaGlest,https://github.com/MegaGlest/megaglest-source.git
+Minetest,https://github.com/minetest/minetest.git
+Multitheftauto,https://github.com/MrHankey/multitheftauto.git
+Oolite,https://github.com/OoliteProject/oolite.git
+OpenArena,https://github.com/undeadzy/openarena_engine.git
+OpenClonk,https://github.com/openclonk/openclonk.git
+OpenDungeons,https://github.com/OpenDungeons/OpenDungeons.git
+OpenMW,https://github.com/OpenMW/openmw.git
+OpenSimulator,https://github.com/nebadon2025/opensimulator.git
+Orxonox,https://github.com/forivall-mirrors/orxonox-game-code.git
+Pioneer,https://github.com/pioneerspacesim/pioneer.git
+SuperTuxKart,https://github.com/supertuxkart/stk-code.git
+Warzone 2100,https://github.com/Warzone2100/warzone2100.git
