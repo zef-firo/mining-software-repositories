@@ -6,23 +6,31 @@ $categories = {
     "development" => {
         "code" => {
             "keywords" => ["source", "src", "tool", "include"],
-            "ext" => ["cpp", "cc", "h", "hpp", "in"]
+            "ext" => ["cpp", "cc", "h", "hpp", "in", "c", "hxx", "java", "cs", "cxx", "hh"]
         },
         "utility" => {
             "keywords" => ["util", "test", "src", "source", "include", "build",	"comp"],
-            "ext" => ["py", "pl", "js", "lua", "mk", "cmake", "m4"]
+            "ext" => ["py", "pl", "js", "lua", "mk", "cmake", "m4", "sh", "dts", "s", "m", "ts"]
         },
         "library" => {
             "keywords" => ["lib", "data", "os", "arch"],
-            "ext" => ["a", "so", "lib", "dll", "so", "zip", "rar", "7z", "gz", "bz2"]
+            "ext" => ["a", "so", "lib", "dll", "so", "zip", "rar", "7z", "gz", "bz2", "idl", "sci", "sce", "inc"]
         },
         "language" => {
             "keywords" => ["language", "lng", "i18n", "translation"],
-            "ext" => ["po", "pot", "i18n", "txt", "xml"]
+            "ext" => ["po", "pot", "i18n", "txt", "xml", "xtb"]
         },
         "docs" => {
             "keywords" => ["doc", "man", "license", "guide", "package"],
-            "ext" => ["tex", "txt", "html", "htm", "xml", "css", "pdf", "jpg", "png", "ico", "gif"]
+            "ext" => ["tex", "txt", "html", "htm", "xml", "css", "pdf", "jpg", "png", "ico", "gif", "xht", "php", "md", "xhtml", "json"]
+        },
+        "security" => {
+            "keywords" => [],
+            "ext" => ["sha1", "crt"]
+        },
+        "test" => {
+            "keywords" => [],
+            "ext" => ["test", "result", "tst", ]
         }
     },
     "multimedia" => {
@@ -32,17 +40,17 @@ $categories = {
         },
         "image" => {
             "keywords" => ["image", "icon", "model", "scenery", "texture", "graphic", "planet", "font"],
-            "ext" => ["png", "rgb", "ttf", "cfg", "map", "jpg", "gif", "ico", "svg", "dds", "xcf", "3ds", "txf", "eff"]
+            "ext" => ["png", "rgb", "ttf", "cfg", "map", "jpg", "gif", "ico", "svg", "dds", "xcf", "3ds", "txf", "eff", "glif", "odg", "icon"]
         },
         "data" => {
             "keywords" => ["image", "icon", "model", "scenery", "texture", "graphic", "planet"],
-            "ext" => ["properties", "xml", "canvas", "effects", "in", "commands", "electrical", "extensions", "desktop"]
+            "ext" => ["properties", "xml", "canvas", "effects", "in", "commands", "electrical", "extensions", "desktop", "textpb", "proto", "csv"]
         }
     },
     "other" => {
         "misc" => {
             "keywords" => ["misc", "other", "tool", "install"],
-            "ext" => ["xml", "conf", "list", "cfg", "txt", "ocm", "lo"]
+            "ext" => ["xml", "conf", "list", "cfg", "txt", "ocm", "lo", "patch", "mm", "gn", "ref", "opt", "ui", "mojom", "headers", "yml", "cnf", "chromium"]
         }
     }
 }
