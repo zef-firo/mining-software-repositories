@@ -54,6 +54,20 @@ function populateCatChart(data) {
             }
         }
     }
+
+    //find max
+    let max = 1;
+    for(let i=0; i<gamedata.length; i++) {
+        if(gamedata[i]>max) {
+            max = gamedata[i];
+        }
+    }
+
+    //normalize data
+    for(let i=0; i<gamedata.length; i++) {
+        gamedata[i]=gamedata[i]/max;
+    }
+
     let gameset = {
         label: 'Games',
         backgroundColor: 'rgb(255, 99, 132)',
@@ -72,6 +86,20 @@ function populateCatChart(data) {
             }
         }
     }
+
+    //find max
+    max = 1;
+    for(let i=0; i<ngamedata.length; i++) {
+        if(ngamedata[i]>max) {
+            max = ngamedata[i];
+        }
+    }
+
+    //normalize data
+    for(let i=0; i<ngamedata.length; i++) {
+        ngamedata[i]=ngamedata[i]/max;
+    }
+
     let ngameset = {
         label: 'Non-games',
         backgroundColor: 'rgb(0, 255, 191)',
