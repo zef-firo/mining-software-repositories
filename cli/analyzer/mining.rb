@@ -1,8 +1,10 @@
 require 'json'
 
+$occlimit = 1000
+
 bfolders = ["games", "nongames"]
 
-$stopwords = ["the", "is", "that", "", "to", "for", "a", "in", "of", "and", "from", "on", "with", "into"]
+$stopwords = ["the", "is", "that", "", "to", "for", "a", "in", "of", "and", "from", "on", "with", "into", "when", "not", "by", "if"]
 
 $categories = {
     "Algorithm" => ["algorithm", "logic", "rendering", "calcula", "procedure", "problem solving", "math", "stack size", "bench script", "mistake", "defect"],
@@ -12,7 +14,9 @@ $categories = {
     "Memory" => ["memory leak", "null pointer", "heap overflow", "buffer overflow", "dangling pointer", "double free", "segmentation fault", "buf", "memleak", "memory leak", "overflow", "alloc"],
     "Performance" => ["optimization", "performance", "slow", "fast", "busy"],
     "Programming" => ["exception handling", "error handling", "type error", "typo", "compilation error", "copy-paste error", "pasting", "refactoring", "missing switch case", "missing check", "faulty initialization", "default value", "match error", "compil", "autotools", "build", "undefined pointer", "syntax error", "instruction", "64bit", "overloaded function", "translation", "engine", "not iniatializ"],
-    "Security" => ["buffer overflow", "security", "password", "auth", "ssl", "exploit", "injection", "aes", "3des", "rc4", "access"]
+    "Security" => ["buffer overflow", "security", "password", "auth", "ssl", "exploit", "injection", "aes", "3des", "rc4", "access"],
+    "Testing" => ["test", "tests", "testing", "Test", "unittest", "unittests", "Tests", "TEST", "testing"],
+    "Dependency" => ["cmake", "makefile", "Makefile"]
 }
 
 $mostoccurred = {}
@@ -71,7 +75,9 @@ end
 logfile = File.dirname(__dir__)+"/"+"logs/notfoundmining_"+Time.now.to_i.to_s+".csv"
 File.write(logfile, "word,count\r\n", mode: "a")
 $mostoccurred.sort_by {|_key, value| value}.reverse!.each do |wnotf,count|
-    File.write(logfile, wnotf+","+count.to_s+"\r\n", mode: "a")
+    if count>=$occlimit
+        File.write(logfile, wnotf+","+count.to_s+"\r\n", mode: "a")
+    end
 end
 
 #write result
