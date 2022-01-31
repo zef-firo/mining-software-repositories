@@ -52,26 +52,6 @@ function populateMinChart(data) {
         }
     }
 
-    //find max
-    let max = 1;
-    for(let i=0; i<gamedata.length; i++) {
-        if(gamedata[i]>max) {
-            max = gamedata[i];
-        }
-    }
-
-    //normalize data
-    for(let i=0; i<gamedata.length; i++) {
-        gamedata[i]=gamedata[i]/max;
-    }
-
-    let gameset = {
-        label: 'Games',
-        backgroundColor: 'rgb(255, 99, 132)',
-        borderColor: 'rgb(255, 99, 132)',
-        data: gamedata
-    };
-
     //populate nongames data
     let ngamedata = [];
     for(i in data.nongames) {
@@ -92,11 +72,26 @@ function populateMinChart(data) {
             max = ngamedata[i];
         }
     }
+    for(let i=0; i<gamedata.length; i++) {
+        if(gamedata[i]>max) {
+            max = gamedata[i];
+        }
+    }
 
     //normalize data
     for(let i=0; i<ngamedata.length; i++) {
         ngamedata[i]=ngamedata[i]/max;
     }
+    for(let i=0; i<gamedata.length; i++) {
+        gamedata[i]=gamedata[i]/max;
+    }
+
+    let gameset = {
+        label: 'Games',
+        backgroundColor: 'rgb(255, 99, 132)',
+        borderColor: 'rgb(255, 99, 132)',
+        data: gamedata
+    };
 
     let ngameset = {
         label: 'Non-games',
