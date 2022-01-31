@@ -4,7 +4,7 @@ $occlimit = 1000
 
 bfolders = ["games", "nongames"]
 
-$stopwords = ["the", "is", "that", "", "to", "for", "a", "in", "of", "and", "from", "on", "with", "into", "when", "not", "by", "if"]
+$ignore = ["where", ":", "missing", "out", "9", "this", "external", "at", "so", "set", "work", "we", "was", "flag", "h", "text", "name", "which", "no", "now", "are", "bug", "make", "after", "3:", "10", "*", "after", "v3", "file", "5", "license", "rt", "6", "some", "it", "all", "be", "Revert", "Use", "support", "files", "webkit", "more", "Added", "RESYNC:", "fix", "remove", "4", "use", "Update", "Change", "3", "code", "header", "new", "2:", "add", "0", "as", "Roll", "generated", "references", "Remove", "removed", "2", "Fix", "Add", "INTEGRATION", "1:", "1", "(1", "FILE", "MERGED", "CWS", "-", "the", "is", "that", "", "to", "for", "a", "in", "of", "and", "from", "on", "with", "into", "when", "not", "by", "if"]
 
 $categories = {
     "Algorithm" => ["algorithm", "logic", "rendering", "calcula", "procedure", "problem solving", "math", "stack size", "bench script", "mistake", "defect"],
@@ -15,8 +15,9 @@ $categories = {
     "Performance" => ["optimization", "performance", "slow", "fast", "busy"],
     "Programming" => ["exception handling", "error handling", "type error", "typo", "compilation error", "copy-paste error", "pasting", "refactoring", "missing switch case", "missing check", "faulty initialization", "default value", "match error", "compil", "autotools", "build", "undefined pointer", "syntax error", "instruction", "64bit", "overloaded function", "translation", "engine", "not iniatializ"],
     "Security" => ["buffer overflow", "security", "password", "auth", "ssl", "exploit", "injection", "aes", "3des", "rc4", "access"],
+    "Database" => ["mysql", "'mysql-5", "'mysql-8", "com:/home/bk/mysql-5", "com:/home/bk/mysql-4", "mysql-8", "MySQL", "MYSQL", "mysql", "mysql-trunk"],
     "Testing" => ["test", "tests", "testing", "Test", "unittest", "unittests", "Tests", "TEST", "testing"],
-    "Dependency" => ["cmake", "makefile", "Makefile"]
+    "Dependency" => ["cmake", "makefile", "Makefile", "packages", "deprecated"]
 }
 
 $mostoccurred = {}
@@ -46,7 +47,7 @@ def scan (repo)
             categorized["Unknown"] = categorized["Unknown"] ? categorized["Unknown"]+1 : 1
             #tokenize not found and save occurrences
             commitarr.each do |word|
-                unless $stopwords.include? word
+                unless $ignore.include? word
                     $mostoccurred[word] = $mostoccurred[word] ? $mostoccurred[word]+1 : 1;
                 end
             end
