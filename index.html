@@ -8,9 +8,22 @@
         <!-- Bootstrap CSS -->
         <link rel="stylesheet" href="./node_modules/bootstrap/dist/css/bootstrap.min.css" />
         <link rel="stylesheet" href="./page.css" />
-        <title>Hello World!</title>
+        <title>Mining software repositories</title>
     </head>
     <body>
+
+        <nav class="navbar navbar-expand-lg fixed-top navbar-light bg-light">
+            <div class="container">
+                <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
+                    <li class="nav-item active">
+                        <a class="navbar-brand" href="#categorization">Categorization</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="navbar-brand" href="#mining">Mining</a>
+                    </li>
+                </ul>
+            </div>
+        </nav>
 
         <div class="container">
 
@@ -22,6 +35,7 @@
                 <div class="col-md-12">
                     <hr/>
                 </div>
+                <!-- categorization -->
                 <div class="col-md-12">
                     <h2>Categorization</h2>
                     <p class="lead">This section shows results on files categorized by extension and keywords detected in file paths.</p>
@@ -57,6 +71,47 @@
                         <div class="alert alert-warning" role="alert">No reports</div>
                     </div>
                 </div>
+
+                <div class="col-md-12 mt-5">
+                    <hr/>
+                </div>
+                <!-- mining -->
+                <div class="col-md-12">
+                    <h2>Mining</h2>
+                    <p class="lead">This section shows results on commits categorized by keywords detected in their messages.</p>
+                </div>
+                <div id="min-not-found" class="col-md-12 mt-2">
+                    <div class="alert alert-danger" role="alert">
+                        <h4 class="alert-heading">Wait!</h4>
+                        <p>Report result not found</p>
+                        <hr>
+                        <div class="text-right">
+                            <button class="btn btn-warning launch-mining">Launch new report</button>
+                        </div>
+                    </div>
+                </div>
+                <div id="min-in-execution" class="col-md-12 mt-2">
+                    <div class="alert alert-info" role="alert">Mining analysis might take some time. You will be alerted when new data are available!</div>
+                </div>
+                <div id="min-results" class="col-md-12">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <canvas id="mining"></canvas>
+                        </div>
+                        <div class="text-right col-md-12 mt-4">
+                            <button class="btn btn-warning launch-mining">Launch new report</button>
+                        </div>
+                    </div>
+                    <h3 class="mt-4">Games</h3>
+                    <div class="row mt-3" id="games-mining-wrapper">
+                        <div class="alert alert-warning" role="alert">No reports</div>
+                    </div>
+                    <h3 class="mt-4 mt-3">Non-Games</h3>
+                    <div class="row" id="nongames-mining-wrapper">
+                        <div class="alert alert-warning" role="alert">No reports</div>
+                    </div>
+                </div>
+
             </div>
 
 
@@ -72,5 +127,6 @@
             </div>
         </script>
         <script src="./page.js"></script>
+        <script src="./mining.js"></script>
     </body>
 </html>
