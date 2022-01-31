@@ -1,7 +1,7 @@
 # Mining software repositories
 This is a software that perform files categorization and repository mining on open-source repositories.
 
-##Usage
+## Usage
 
 ### Compile repository files
 Compile `game-repo.csv` and `nongame-repo.csv` files to select which repositories must be analyzed.
