@@ -1,9 +1,3 @@
-const electron = require('electron');
-const { app, BrowserWindow } = require('electron');
-var fs = require('fs');
-const {ipcMain} = require('electron');
-const { spawn } = require("child_process");
-
 function createWindow () {
 
     const win = new BrowserWindow({

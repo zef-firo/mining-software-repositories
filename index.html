@@ -126,7 +126,14 @@
                 </div>
             </div>
         </script>
-        <script src="./page.js"></script>
+        <script>
+            const electron = require('electron');
+            const { app, BrowserWindow } = require('electron');
+            var fs = require('fs');
+            const {ipcMain} = require('electron');
+            const { spawn } = require("child_process");
+        </script>
+        <script src="./categorization.js"></script>
         <script src="./mining.js"></script>
     </body>
 </html>
