@@ -30,6 +30,9 @@ function populateMinLabels(data) {
     minlabels = [];
     let firstgame = data.games[ Object.keys(data.games)[0] ];
     for(i in firstgame) {
+        if(i == "Unknown") {
+            continue;
+        }
         minlabels.push(i);
     }    
 }
@@ -41,6 +44,9 @@ function populateMinChart(data) {
     for(i in data.games) {
         var count = 0;
         for(j in data.games[i]) {
+            if(j == "Unknown") {
+                continue;
+            }
             gamedata[ count ] = gamedata[ count ] ? gamedata[ count ]+data.games[i][j] : data.games[i][j];
             count++;
         }
@@ -71,6 +77,9 @@ function populateMinChart(data) {
     for(i in data.nongames) {
         var count = 0;
         for(j in data.nongames[i]) {
+            if(j == "Unknown") {
+                continue;
+            }
             ngamedata[ count ] = ngamedata[ count ] ? ngamedata[ count ]+data.nongames[i][j] : data.nongames[i][j];
             count++;
         }
@@ -130,6 +139,9 @@ function populatePjMinChart($wrp, data, idprefix) {
         let chartdata = [];
         let labelcount = 0;
         for(j in data[i]) {
+            if(j == "Unknown") {
+                continue;
+            }
             chartdata[ labelcount ] = chartdata[ labelcount ] ? chartdata[ labelcount ]+data[i][j] : data[i][j];
             labelcount++;
         }
