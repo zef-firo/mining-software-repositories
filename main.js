@@ -57,3 +57,29 @@ ipcMain.on('launch-categorization', (event) => {
     event.sender.send('categorization-done', 'done');
   });
 });
+
+ipcMain.on('read-mining-file', (event) => {
+  catfile = "cli/results/mining.json";
+  fs.readFile(catfile, 'utf-8', (err, data) => {
+      if(err){
+          event.sender.send('mining-file-response', "nofile");
+      }
+      else {
+          event.sender.send('mining-file-response', data);
+      }
+  });
+});
+
+ipcMain.on('launch-mining', (event) => {
+  let basepath = app.getAppPath();
+
+  let exe = spawn("ruby", [basepath+"/cli/analyzer/mining.rb"]);
+  exe.stderr.on("data", (err) => {
+    event.sender.send('mining-done', 'error');
+  });
+
+  exe.on("exit", (code) => {
+    console.log("Mining done. Code: "+code);
+    event.sender.send('mining-done', 'done');
+  });
+});

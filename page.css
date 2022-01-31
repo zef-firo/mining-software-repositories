@@ -1,4 +1,4 @@
-#cat-results, #cat-in-execution {
+#cat-results, #cat-in-execution, #min-results, #min-in-execution {
     display: none;
 }
 .panel {
@@ -7,5 +7,5 @@
     border-radius: 3px;
 }
 body {
-    padding-bottom: 50px;
+    padding: 50px 0px;
 }
