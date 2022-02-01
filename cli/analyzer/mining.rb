@@ -4,7 +4,11 @@ $occlimit = 1000
 
 bfolders = ["games", "nongames"]
 
-$ignore = ["where", ":", "missing", "out", "9", "this", "external", "at", "so", "set", "work", "we", "was", "flag", "h", "text", "name", "which", "no", "now", "are", "bug", "make", "after", "3:", "10", "*", "after", "v3", "file", "5", "license", "rt", "6", "some", "it", "all", "be", "Revert", "Use", "support", "files", "webkit", "more", "Added", "RESYNC:", "fix", "remove", "4", "use", "Update", "Change", "3", "code", "header", "new", "2:", "add", "0", "as", "Roll", "generated", "references", "Remove", "removed", "2", "Fix", "Add", "INTEGRATION", "1:", "1", "(1", "FILE", "MERGED", "CWS", "-", "the", "is", "that", "", "to", "for", "a", "in", "of", "and", "from", "on", "with", "into", "when", "not", "by", "if"]
+$ignore = ["where", ":", "missing", "out", "9", "this", "external", "at", "so", "set", "work", "we", "was", "flag", "h", "text", "name", "which", "no", "now", "are", "make", "after", "3:", "10", "*", "after", "v3", "file", "5", "license", "rt", "6", "some", "it", "all", "be", "Revert", "Use", "support", "files", "webkit", "more", "Added", "RESYNC:", "remove", "4", "use", "Update", "Change", "3", "code", "header", "new", "2:", "add", "0", "as", "Roll", "generated", "references", "Remove", "removed", "2", "Add", "INTEGRATION", "1:", "1", "(1", "FILE", "MERGED", "CWS", "-", "the", "is", "that", "", "to", "for", "a", "in", "of", "and", "from", "on", "with", "into", "when", "not", "by", "if"]
+
+$bugkwords = ["bug", "Bug"]
+
+$fixkwords = ["fix", "Fixes", "Fix", "fixes"]
 
 $categories = {
     "Algorithm" => ["algorithm", "logic", "rendering", "calcula", "procedure", "problem solving", "math", "stack size", "bench script", "mistake", "defect"],
@@ -16,8 +20,7 @@ $categories = {
     "Programming" => ["exception handling", "error handling", "type error", "typo", "compilation error", "copy-paste error", "pasting", "refactoring", "missing switch case", "missing check", "faulty initialization", "default value", "match error", "compil", "autotools", "build", "undefined pointer", "syntax error", "instruction", "64bit", "overloaded function", "translation", "engine", "not iniatializ"],
     "Security" => ["buffer overflow", "security", "password", "auth", "ssl", "exploit", "injection", "aes", "3des", "rc4", "access"],
     "Database" => ["mysql", "'mysql-5", "'mysql-8", "com:/home/bk/mysql-5", "com:/home/bk/mysql-4", "mysql-8", "MySQL", "MYSQL", "mysql", "mysql-trunk"],
-    "Testing" => ["test", "tests", "testing", "Test", "unittest", "unittests", "Tests", "TEST", "testing"],
-    "Dependency" => ["cmake", "makefile", "Makefile", "packages", "deprecated"]
+    "Testing" => ["test", "tests", "testing", "Test", "unittest", "unittests", "Tests", "TEST", "testing"]
 }
 
 $mostoccurred = {}
@@ -38,7 +41,25 @@ def scan (repo)
             $categories.each do |cat, kwords|
                 if kwords.include? word
                     found = true
-                    categorized[cat] = categorized[cat] ? categorized[cat]+1 : 1
+
+                    if !categorized[cat]
+                        categorized[cat] = {
+                            "total"=>0,
+                            "bug"=>0,
+                            "fix"=>0
+                        }
+                    end
+
+                    categorized[cat]["total"] = categorized[cat]["total"]+1
+
+                    #is it bug or fix commit?
+                    if (commitarr & $bugkwords).any?
+                        categorized[cat]["bug"] = categorized[cat]["bug"]+1
+                    end
+                    if (commitarr & $fixkwords).any?
+                        categorized[cat]["fix"] = categorized[cat]["fix"]+1
+                    end
+
                 end
             end
         end
