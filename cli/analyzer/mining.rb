@@ -6,9 +6,7 @@ bfolders = ["games", "nongames"]
 
 $ignore = ["where", ":", "missing", "out", "9", "this", "external", "at", "so", "set", "work", "we", "was", "flag", "h", "text", "name", "which", "no", "now", "are", "make", "after", "3:", "10", "*", "after", "v3", "file", "5", "license", "rt", "6", "some", "it", "all", "be", "Revert", "Use", "support", "files", "webkit", "more", "Added", "RESYNC:", "remove", "4", "use", "Update", "Change", "3", "code", "header", "new", "2:", "add", "0", "as", "Roll", "generated", "references", "Remove", "removed", "2", "Add", "INTEGRATION", "1:", "1", "(1", "FILE", "MERGED", "CWS", "-", "the", "is", "that", "", "to", "for", "a", "in", "of", "and", "from", "on", "with", "into", "when", "not", "by", "if"]
 
-$bugkwords = ["bug", "Bug"]
-
-$fixkwords = ["fix", "Fixes", "Fix", "fixes"]
+$bugrelated = ["bug", "Bug", "fix", "Fixes", "Fix", "fixes"]
 
 $categories = {
     "Algorithm" => ["algorithm", "logic", "rendering", "calcula", "procedure", "problem solving", "math", "stack size", "bench script", "mistake", "defect"],
@@ -45,19 +43,15 @@ def scan (repo)
                     if !categorized[cat]
                         categorized[cat] = {
                             "total"=>0,
-                            "bug"=>0,
-                            "fix"=>0
+                            "bug"=>0
                         }
                     end
 
                     categorized[cat]["total"] = categorized[cat]["total"]+1
 
-                    #is it bug or fix commit?
-                    if (commitarr & $bugkwords).any?
+                    #is it bug related?
+                    if (commitarr & $bugrelated).any?
                         categorized[cat]["bug"] = categorized[cat]["bug"]+1
-                    end
-                    if (commitarr & $fixkwords).any?
-                        categorized[cat]["fix"] = categorized[cat]["fix"]+1
                     end
 
                 end
