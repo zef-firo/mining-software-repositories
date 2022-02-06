@@ -28,13 +28,36 @@ def scan (repo)
 
     puts "Mining ("+repo+") ..."
 
-    cmd = "git -C \""+repo+"\" log --pretty=reference"
+    cmd = "git -C \""+repo+"\" log --pretty=\"##msrcommit##%h (%s, %cs)\" --stat"
     repolog = `#{cmd}`
-    repolog.each_line do |commit|
+    repoarr = repolog.encode!('UTF-8', 'binary', invalid: :replace, undef: :replace, replace: '').split(/##msrcommit##/, -1)
+    count = 1
+    repoarr.each do |commit|
+
+        puts "...commit "+count.to_s+" of "+repoarr.size.to_s
+        count=count+1
+
+        if commit.to_s.strip.empty?
+            next
+        end
+        
+        commitencode = commit.encode!('UTF-8', 'binary', invalid: :replace, undef: :replace, replace: '')
+        
+        #detect commit size
+        commitinsert = commitencode[/\.*\s([0-9]+)\sinsertion[s].*/, 1].to_i
+        commitdelete = commitencode[/\.*\s([0-9]+)\sdeletion[s]+\.*/, 1].to_i
+        commitsize = commitinsert+commitdelete
 
         found = false
         
-        commitarr = commit.encode!('UTF-8', 'binary', invalid: :replace, undef: :replace, replace: '')[/\((.*),\s+[0-9-]+\)/, 1].split(/[\s,.]/)
+        #categorize by commit message
+        commitext = commitencode[/\((.*),\s+[0-9-]+\).*/, 1]
+        if commitext.nil?
+            next
+        end
+
+        commitarr = commitext.split(/[\s,.]/)
+
         commitarr.each do |word|
             $categories.each do |cat, kwords|
                 if kwords.include? word
@@ -43,11 +66,13 @@ def scan (repo)
                     if !categorized[cat]
                         categorized[cat] = {
                             "total"=>0,
+                            "dimension"=>0,
                             "bug"=>0
                         }
                     end
 
                     categorized[cat]["total"] = categorized[cat]["total"]+1
+                    categorized[cat]["dimension"] = categorized[cat]["dimension"]+commitsize
 
                     #is it bug related?
                     if (commitarr & $bugrelated).any?
