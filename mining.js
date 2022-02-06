@@ -37,73 +37,101 @@ function populateMinLabels(data) {
     }    
 }
 
+function findMax(arr) {
+    //find max
+    let max = 1;
+    for(let i=0; i<arr.length; i++) {
+        if(arr[i]>max) {
+            max = arr[i];
+        }
+    }
+    return max;
+}
+
+function normalizeData(arr, max) {
+
+    if(!max) {
+        max = findMax(arr);
+    }
+
+    //normalize data
+    for(let i=0; i<arr.length; i++) {
+        arr[i]=arr[i]/max;
+    }
+
+    return arr;
+
+}
+
 function populateMinChart(data) {
 
     //populate games data
     let gamedata = [];
+    let gamebrelated = [];
     for(i in data.games) {
         var count = 0;
-        for(j in data.games[i]) {
+        for(j in data.games[i]) { 
             if(j == "Unknown") {
                 continue;
             }
-            gamedata[ count ] = gamedata[ count ] ? gamedata[ count ]+data.games[i][j] : data.games[i][j];
+            gamedata[ count ] = gamedata[ count ] ? gamedata[ count ]+data.games[i][j]["total"] : data.games[i][j]["total"];
+            gamebrelated[ count ] = gamebrelated[ count ] ? gamebrelated[ count ]+data.games[i][j]["bug"] : data.games[i][j]["bug"];
             count++;
         }
     }
 
-    //find max
-    let max = 1;
-    for(let i=0; i<gamedata.length; i++) {
-        if(gamedata[i]>max) {
-            max = gamedata[i];
-        }
-    }
-
-    //normalize data
-    for(let i=0; i<gamedata.length; i++) {
-        gamedata[i]=gamedata[i]/max;
-    }
+    gamemax = findMax(gamedata);
+    gamedata = normalizeData(gamedata, gamemax);
+    gamebrelated = normalizeData(gamebrelated, gamemax);
 
     let gameset = {
         label: 'Games',
         backgroundColor: 'rgb(255, 99, 132)',
         borderColor: 'rgb(255, 99, 132)',
-        data: gamedata
+        data: gamedata,
+        stack: "Games"
     };
+    let gamebset = {
+        label: 'Games - bug related',
+        backgroundColor: 'rgb(255, 181, 195)',
+        borderColor: 'rgb(255, 181, 195)',
+        data: gamebrelated,
+        stack: "Games"
+    }
 
     //populate nongames data
     let ngamedata = [];
+    let ngamebdata = [];
     for(i in data.nongames) {
         var count = 0;
         for(j in data.nongames[i]) {
             if(j == "Unknown") {
                 continue;
             }
-            ngamedata[ count ] = ngamedata[ count ] ? ngamedata[ count ]+data.nongames[i][j] : data.nongames[i][j];
+            ngamedata[ count ] = ngamedata[ count ] ? ngamedata[ count ]+data.nongames[i][j]["total"] : data.nongames[i][j]["total"];
+            ngamebdata[ count ] = ngamebdata[ count ] ? ngamebdata[ count ]+data.nongames[i][j]["bug"] : data.nongames[i][j]["bug"];
             count++;
         }
     }
 
-    //find max
-    max = 1;
-    for(let i=0; i<ngamedata.length; i++) {
-        if(ngamedata[i]>max) {
-            max = ngamedata[i];
-        }
-    }
-
-    //normalize data
-    for(let i=0; i<ngamedata.length; i++) {
-        ngamedata[i]=ngamedata[i]/max;
-    }
+    ngamemax = findMax(ngamedata);
+    ngamedata = normalizeData(ngamedata, ngamemax);
+    ngamebdata = normalizeData(ngamebdata, ngamemax);
 
     let ngameset = {
         label: 'Non-games',
         backgroundColor: 'rgb(0, 255, 191)',
         borderColor: 'rgb(0, 255, 191)',
-        data: ngamedata
+        data: ngamedata,
+        stack: "Nongames"
     };
+    let ngamebset = {
+        label: 'Non-games - bug related',
+        backgroundColor: 'rgb(150, 255, 227)',
+        borderColor: 'rgb(150, 255, 227)',
+        data: ngamebdata,
+        stack: "Nongames"
+    }
 
     var ctx = document.getElementById('mining').getContext('2d');
     if(minchart) {
@@ -113,9 +141,18 @@ function populateMinChart(data) {
         type: 'bar',
         data: {
             labels: minlabels,
-            datasets: [gameset, ngameset]
+            datasets: [gamebset, gameset, ngamebset, ngameset]
         },
-        options: {}
+        options: {
+            scales: {
+                x: {
+                    stacked: true,
+                },
+                y: {
+                    stacked: true
+                }
+            }
+        }
     });
 
 }
@@ -137,12 +174,14 @@ function populatePjMinChart($wrp, data, idprefix) {
 
         //chart
         let chartdata = [];
+        let chartbdata = [];
         let labelcount = 0;
         for(j in data[i]) {
             if(j == "Unknown") {
                 continue;
             }
-            chartdata[ labelcount ] = chartdata[ labelcount ] ? chartdata[ labelcount ]+data[i][j] : data[i][j];
+            chartdata[ labelcount ] = chartdata[ labelcount ] ? chartdata[ labelcount ]+data[i][j]["total"] : data[i][j]["total"];
+            chartbdata[ labelcount ] = chartbdata[ labelcount ] ? chartbdata[ labelcount ]+data[i][j]["bug"] : data[i][j]["bug"];
             labelcount++;
         }
         var ctx = document.getElementById(idprefix+'_'+count).getContext('2d');
@@ -150,14 +189,28 @@ function populatePjMinChart($wrp, data, idprefix) {
             type: 'bar',
             data: {
                 labels: minlabels,
-                datasets: [{
-                    label: i,
-                    backgroundColor: 'rgb(255, 199, 0)',
-                    borderColor: 'rgb(255, 199, 0)',
-                    data: chartdata
-                }]
+                datasets: [
+                    {
+                        label: i+" - bug related",
+                        backgroundColor: 'rgb(255, 226, 132)',
+                        borderColor: 'rgb(255, 226, 132)',
+                        data: chartbdata
+                    },
+                    {
+                        label: i,
+                        backgroundColor: 'rgb(255, 199, 0)',
+                        borderColor: 'rgb(255, 199, 0)',
+                        data: chartdata
+                    }
+                ]
             },
-            options: {}
+            options: {
+                scales: {
+                    x: {
+                        stacked: true,
+                    }
+                }
+            }
         });
         
         pminchars.push(chartObj);
