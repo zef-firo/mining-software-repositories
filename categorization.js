@@ -3,7 +3,7 @@ require('popper.js');
 require('bootstrap');
 const { ipcRenderer } = require('electron');
 var Chart = require('chart.js');
-var catchart;
+var catchart, catdimchart;
 var pcatchars = [];
 var catlabels = [];
 
@@ -24,6 +24,7 @@ ipcRenderer.on('categories-file-response', (event, arg) => {
 
         populateCatLabels(jfile);
         populateCatChart(jfile);
+        populateCatDimChart(jfile);
         resetGCatCharts();
         populatePjCatChart($("#games-categories-wrapper"), jfile.games, "game");
         populatePjCatChart($("#nongames-categories-wrapper"), jfile.nongames, "nongame");
@@ -41,7 +42,7 @@ function populateCatLabels(data) {
     }    
 }
 
-function populateCatChart(data) {
+function populateCatDimChart(data) {
 
     //populate games data
     let gamedata = [];
@@ -49,7 +50,7 @@ function populateCatChart(data) {
         var count = 0;
         for(j in data.games[i]) {
             for(k in data.games[i][j]) {
-                gamedata[ count ] = gamedata[ count ] ? gamedata[ count ]+data.games[i][j][k] : data.games[i][j][k];
+                gamedata[ count ] = gamedata[ count ] ? gamedata[ count ]+data.games[i][j][k]["dimension"] : data.games[i][j][k]["dimension"];
                 count++;
             }
         }
@@ -81,7 +82,88 @@ function populateCatChart(data) {
         var count = 0;
         for(j in data.nongames[i]) {
             for(k in data.nongames[i][j]) {
-                ngamedata[ count ] = ngamedata[ count ] ? ngamedata[ count ]+data.nongames[i][j][k] : data.nongames[i][j][k];
+                ngamedata[ count ] = ngamedata[ count ] ? ngamedata[ count ]+data.nongames[i][j][k]["dimension"] : data.nongames[i][j][k]["dimension"];
+                count++;
+            }
+        }
+    }
+
+    //find max
+    max = 1;
+    for(let i=0; i<ngamedata.length; i++) {
+        if(ngamedata[i]>max) {
+            max = ngamedata[i];
+        }
+    }
+
+    //normalize data
+    for(let i=0; i<ngamedata.length; i++) {
+        ngamedata[i]=ngamedata[i]/max;
+    }
+
+    let ngameset = {
+        label: 'Non-games',
+        backgroundColor: 'rgb(0, 255, 191)',
+        borderColor: 'rgb(0, 255, 191)',
+        data: ngamedata
+    };
+
+    var ctx = document.getElementById('cat-dimensions').getContext('2d');
+    if(catdimchart) {
+        catdimchart.destroy();
+    }
+    catdimchart = new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: catlabels,
+            datasets: [gameset, ngameset]
+        },
+        options: {}
+    });
+
+}
+
+function populateCatChart(data) {
+
+    //populate games data
+    let gamedata = [];
+    for(i in data.games) {
+        var count = 0;
+        for(j in data.games[i]) {
+            for(k in data.games[i][j]) {
+                gamedata[ count ] = gamedata[ count ] ? gamedata[ count ]+data.games[i][j][k]["total"] : data.games[i][j][k]["total"];
+                count++;
+            }
+        }
+    }
+
+    //find max
+    let max = 1;
+    for(let i=0; i<gamedata.length; i++) {
+        if(gamedata[i]>max) {
+            max = gamedata[i];
+        }
+    }
+
+    //normalize data
+    for(let i=0; i<gamedata.length; i++) {
+        gamedata[i]=gamedata[i]/max;
+    }
+
+    let gameset = {
+        label: 'Games',
+        backgroundColor: 'rgb(255, 99, 132)',
+        borderColor: 'rgb(255, 99, 132)',
+        data: gamedata
+    };
+
+    //populate nongames data
+    let ngamedata = [];
+    for(i in data.nongames) {
+        var count = 0;
+        for(j in data.nongames[i]) {
+            for(k in data.nongames[i][j]) {
+                ngamedata[ count ] = ngamedata[ count ] ? ngamedata[ count ]+data.nongames[i][j][k]["total"] : data.nongames[i][j][k]["total"];
                 count++;
             }
         }
@@ -142,7 +224,7 @@ function populatePjCatChart($wrp, data, idprefix) {
         let labelcount = 0;
         for(j in data[i]) {
             for(k in data[i][j]) {
-                chartdata[ labelcount ] = chartdata[ labelcount ] ? chartdata[ labelcount ]+data[i][j][k] : data[i][j][k];
+                chartdata[ labelcount ] = chartdata[ labelcount ] ? chartdata[ labelcount ]+data[i][j][k]["total"] : data[i][j][k]["total"];
                 labelcount++;
             }
         }
@@ -170,6 +252,7 @@ function populatePjCatChart($wrp, data, idprefix) {
 ipcRenderer.on('categorization-done', (event, arg) => {
     $(".launch-categorization").removeClass("disabled");
     if(arg=="done") {
+        alert("New categorization data are ready.");
         requestCategorizationFile();
     }
     else {
