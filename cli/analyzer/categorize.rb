@@ -72,11 +72,17 @@ def newempty
     $categories.each do |section, categories|
         empty[section] = {}
         categories.each do |category, content|
-            empty[section][category] = 0
+            empty[section][category] = {}
+            empty[section][category]["total"] = 0
+            empty[section][category]["dimension"] = 0
         end
     end
-    empty["other"]["noext"] = 0;
-    empty["other"]["notfound"] = 0;
+    empty["other"]["noext"] = {}
+    empty["other"]["noext"]["total"] = 0;
+    empty["other"]["noext"]["dimension"] = 0;
+    empty["other"]["notfound"] = {}
+    empty["other"]["notfound"]["total"] = 0;
+    empty["other"]["notfound"]["dimension"] = 0;
     return empty
 end
 
@@ -84,7 +90,13 @@ def scan (repo)
     empty = newempty
     Dir.glob(repo+"/**/*").each do |file|
 
+        if !File.file?(file)
+            next
+        end
+
         notfound = true
+
+        filedim = File.size(file)
 
         #find extension
         ext = File.extname(file).delete "."
@@ -92,11 +104,13 @@ def scan (repo)
             eindex = $extensions.keys.find_index(ext)
             if eindex
                 notfound = false
-                empty[ $extensions[ext][:section] ][ $extensions[ext][:category] ]+=1
+                empty[ $extensions[ext][:section] ][ $extensions[ext][:category] ]["total"]+=1
+                empty[ $extensions[ext][:section] ][ $extensions[ext][:category] ]["dimension"]+=filedim
             end
         else
             notfound = false
-            empty["other"]["noext"]+=1
+            empty["other"]["noext"]["total"]+=1
+            empty["other"]["noext"]["dimension"]+=filedim
         end
 
         #find keyword in path
@@ -104,13 +118,15 @@ def scan (repo)
         $keywords.each do |k, content|
             if patharray.include? k
                 notfound = false
-                empty[ content[:section] ][ content[:category] ]+=1
+                empty[ content[:section] ][ content[:category] ]["total"]+=1
+                empty[ content[:section] ][ content[:category] ]["dimension"]+=filedim
             end
         end
 
         if notfound
             $notfound_extensions[ ext ] = $notfound_extensions[ ext ] ? $notfound_extensions[ ext ]+1 : 1;
-            empty["other"]["notfound"]+=1
+            empty["other"]["notfound"]["total"]+=1
+            empty["other"]["notfound"]["dimension"]+=filedim
         end
 
     end
@@ -120,7 +136,9 @@ end
 def categorize (basefolder)
     upper = {}
     Dir.glob(File.dirname(__dir__)+"/"+basefolder+"/*").each do |repo|
+        puts "Scanning "+repo+"..."
         upper[repo.split('/').last] = scan repo
+        puts "...done"
     end
     return upper
 end
