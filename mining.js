@@ -1,4 +1,4 @@
-var minchart;
+var minchart, mindimchart;
 var pminchars = [];
 var minlabels = [];
 
@@ -19,6 +19,7 @@ ipcRenderer.on('mining-file-response', (event, arg) => {
 
         populateMinLabels(jfile);
         populateMinChart(jfile);
+        populateMinDimChart(jfile);
         resetGMinCharts();
         populatePjMinChart($("#games-mining-wrapper"), jfile.games, "mingame");
         populatePjMinChart($("#nongames-mining-wrapper"), jfile.nongames, "minnongame");
@@ -60,6 +61,68 @@ function normalizeData(arr, max) {
     }
 
     return arr;
+
+}
+
+function populateMinDimChart(data) {
+
+    //populate games data
+    let gamedata = [];
+    for(i in data.games) {
+        var count = 0;
+        for(j in data.games[i]) { 
+            if(j == "Unknown") {
+                continue;
+            }
+            gamedata[ count ] = gamedata[ count ] ? gamedata[ count ]+data.games[i][j]["dimension"] : data.games[i][j]["dimension"];
+            count++;
+        }
+    }
+
+    //populate nongames data
+    let ngamedata = [];
+    for(i in data.nongames) {
+        var count = 0;
+        for(j in data.nongames[i]) {
+            if(j == "Unknown") {
+                continue;
+            }
+            ngamedata[ count ] = ngamedata[ count ] ? ngamedata[ count ]+data.nongames[i][j]["dimension"] : data.nongames[i][j]["dimension"];
+            count++;
+        }
+    }
+
+    max = findMax([...gamedata, ...ngamedata]);
+    gamedata = normalizeData(gamedata, max);
+    ngamedata = normalizeData(ngamedata, max);
+
+    let ngameset = {
+        label: 'Non-games',
+        backgroundColor: 'rgb(0, 255, 191)',
+        borderColor: 'rgb(0, 255, 191)',
+        data: ngamedata,
+        stack: "Nongames"
+    };
+    let gameset = {
+        label: 'Games',
+        backgroundColor: 'rgb(255, 99, 132)',
+        borderColor: 'rgb(255, 99, 132)',
+        data: gamedata,
+        stack: "Games"
+    };
+
+    var ctx = document.getElementById('mining-dimensions').getContext('2d');
+    if(mindimchart) {
+        mindimchart.destroy();
+    }
+    mindimchart = new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: minlabels,
+            datasets: [gameset, ngameset]
+        },
+        options: {}
+    });
 
 }
 
